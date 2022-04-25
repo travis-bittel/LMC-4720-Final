@@ -119,14 +119,33 @@ ah screw it, just make a bunch of ifs for it. --&gt;
 &lt;/map&gt;}</tw-passagedata><tw-passagedata pid="2" name="The Dumping Grounds" tags="dump" position="100,800" size="100,100">{(if: $currentLocation is not &quot;The Dumping Grounds&quot;)[
 	(set: $currentLocation to &quot;The Dumping Grounds&quot;)
 	(set: $time to 0)
-	(set: $daysRemaining to $daysRemaining - 1)
 ]}
-[[World Map]]</tw-passagedata><tw-passagedata pid="3" name="The Last City" tags="" position="1300,1100" size="100,100">{(if: $currentLocation is not &quot;The Last City&quot;)[
+
+(if: $brotherIsAlive)[
+With no other option, you and your brother take to scavenging the Dumping Grounds for any supplies you can use.
+
+You hear the sound of metal creaking as the wind blows.
+
+{Continue onwards.
+(click:&quot;Continue onwards.&quot;)[
+&lt;br&gt;You move onwards, finding a sack of canned goods — the supplies you need to get to Blacklisle. You turn to look for your brother and see that he has slipped away from your side.
+
+&lt;br&gt;Call out to him.(click: &quot;Call out to him.&quot;)[
+&lt;br&gt; You call out to him and he turns to look at you as a pile of scrap metal begins to collapse. He doesn&#39;t notice in time.(set: $brotherIsAlive to false)(set:$locationAccessabilityList&#39;s &quot;Town2&quot; to true)
+&lt;br&gt;[[Return|Town1]]
+]
+]}
+](else:)[
+There is nothing here for you anymore.
+
+[[Return|Town1]]
+]</tw-passagedata><tw-passagedata pid="3" name="The Last City" tags="" position="1300,1100" size="100,100">{(if: $currentLocation is not &quot;The Last City&quot;)[
 	(set: $currentLocation to &quot;The Last City&quot;)
 	(set: $time to 0)
-	(set: $daysRemaining to $daysRemaining - 1)
 ]}
-[[World Map]]</tw-passagedata><tw-passagedata pid="4" name="Initialize" tags="" position="100,150" size="100,100">&lt;!-- Holds whether the player can currently travel to each location. Make sure that the names in the datamap match the names of the actual passages.--&gt;
+
+(if: $hasJoinedResistance)[(go-to:&quot;Resistance Ending&quot;)]
+(else:)[(go-to:&quot;City Ending&quot;)]</tw-passagedata><tw-passagedata pid="4" name="Initialize" tags="" position="100,149" size="100,100">&lt;!-- Holds whether the player can currently travel to each location. Make sure that the names in the datamap match the names of the actual passages.--&gt;
 (set: $locationAccessabilityList to 
 	(dm: &quot;The Dumping Grounds&quot;, true,
 		 &quot;The Last City&quot;, false,
@@ -143,6 +162,10 @@ ah screw it, just make a bunch of ifs for it. --&gt;
 (set: $daysRemaining to 5)
 
 (set: $hasGoods to false)
+(set: $hasTickets to false)
+(set: $town2EncounterCompleted to false)
+(set: $brotherIsAlive to true)
+(set: $hasJoinedResistance to false)
 
 (goto: &quot;Start&quot;)</tw-passagedata><tw-passagedata pid="5" name="Town1" tags="town" position="100,500" size="100,100">{(set: $time to $time + 1)
 (set: $currentLocation to &quot;Town1&quot;)}
@@ -157,23 +180,49 @@ You are currently in Birmiota.
 Without goods to trade, your only real option is the  Dumping Grounds. It&#39;s dangerous, but it might be your only hope.(click: &quot;Dumping Grounds&quot;)[(go-to:&quot;The Dumping Grounds&quot;)]
 ]}
 
+(if: $locationAccessabilityList&#39;s &quot;Town2&quot; is true)[&#39;&#39;You have what you need to travel onwards to Sand&#39;s Edge.&#39;&#39;]
+
 [[View Your Map|World Map No Travel]]
-Wait Until Night(click: &quot;Wait Until Night&quot;)[&#39;&#39;&lt;br&gt;This will end today and give you the opportunity to select a new destination. &lt;br&gt;Confirm&#39;&#39;(click: &quot;Confirm&quot;)[(go-to:&quot;Night&quot;)]]</tw-passagedata><tw-passagedata pid="6" name="Town2" tags="town" position="100,1100" size="100,100">{(if: $currentLocation is not &quot;Town2&quot;)[
+Wait Until Night(click: &quot;Wait Until Night&quot;)[&#39;&#39;&lt;br&gt;This will end today and give you the opportunity to select a new destination. &lt;br&gt;Confirm&#39;&#39;(click: &quot;Confirm&quot;)[(go-to:&quot;Night&quot;)]]</tw-passagedata><tw-passagedata pid="6" name="Town2" tags="town" position="99,1099" size="100,100">{(if: $currentLocation is not &quot;Town2&quot;)[
 	(set: $currentLocation to &quot;Town2&quot;)
 	(set: $time to 0)
-	(set: $daysRemaining to $daysRemaining - 1)
+	(set: $locationAccessabilityList&#39;s &quot;Town3&quot; to true)
 ]}
-[[World Map]]</tw-passagedata><tw-passagedata pid="7" name="Town3" tags="town" position="1300,500" size="100,100">{(if: $currentLocation is not &quot;Town3&quot;)[
+{(if: $town2EncounterCompleted is false)[(go-to:&quot;Town2 Encounter&quot;)]}
+(display: &quot;F:DisplayTime&quot;)
+
+You are currently in Sand&#39;s Edge. The town is among the smallest in the region and sits at the edge of the Wastelands where nothing survives.
+
+There isn&#39;t much to do here, so you (if: $brotherIsAlive)[and your brother] take some time to rest in the shade before beginning your next journey.
+
+[[View Your Map|World Map No Travel]]
+Wait Until Night(click: &quot;Wait Until Night&quot;)[&#39;&#39;&lt;br&gt;This will end today and give you the opportunity to select a new destination. &lt;br&gt;Confirm&#39;&#39;(click: &quot;Confirm&quot;)[(go-to:&quot;Night&quot;)]]</tw-passagedata><tw-passagedata pid="7" name="Town3" tags="town" position="1300,500" size="100,100">{(if: $currentLocation is not &quot;Town3&quot;)[
 	(set: $currentLocation to &quot;Town3&quot;)
 	(set: $time to 0)
-	(set: $daysRemaining to $daysRemaining - 1)
+	(set: $locationAccessabilityList&#39;s &quot;Town4&quot; to true)
 ]}
+(display: &quot;F:DisplayTime&quot;)
 
-[[World Map]] </tw-passagedata><tw-passagedata pid="8" name="Town4" tags="town" position="1300,800" size="100,100">{(if: $currentLocation is not &quot;Town4&quot;)[
+You are currently in Lake Pacram. The town is the closest one to the Last City. It sits on a polluted lake from which it gains its name — the water might not be clean, but it&#39;s better than nothing. It was once something of a metropolis before the Last City and it the more modern structures are built among ruins of old buildings.
+
+(if: $locationAccessabilityList&#39;s &quot;The Last City&quot; is true)[&#39;&#39;You have a way into the Last City if you wish to travel there.&#39;&#39;]
+(if: $locationAccessabilityList&#39;s &quot;Town4&quot; is true)[&#39;&#39;You can make the journey to Blacklisle tomorrow morning if you wish to travel there.&#39;&#39;]
+
+(if: $brotherIsAlive and $locationAccessabilityList&#39;s &quot;The Last City&quot; is false)[Your brother calls your attention to something.(click: &quot;something.&quot;)[(go-to:&quot;Town3-Ticket&quot;)]]
+
+[[View Your Map|World Map No Travel]]
+Wait Until Night(click: &quot;Wait Until Night&quot;)[&#39;&#39;&lt;br&gt;This will end today and give you the opportunity to select a new destination. &lt;br&gt;Confirm&#39;&#39;(click: &quot;Confirm&quot;)[(go-to:&quot;Night&quot;)]]</tw-passagedata><tw-passagedata pid="8" name="Town4" tags="town" position="1300,800" size="100,100">{(if: $currentLocation is not &quot;Town4&quot;)[
 	(set: $currentLocation to &quot;Town4&quot;)
 	(set: $time to 0)
-	(set: $daysRemaining to $daysRemaining - 1)
 ]}
+
+You are in Blacklisle, a frequent stop for Outsiders travelling to and from just about anywhere.
+
+{(if: $hasJoinedResistance is true)[(set: $locationAccessabilityList&#39;s &quot;The Last City&quot; to true)&#39;&#39;You speak with the resistance leaders and they explain the plan to you. They have a Ticket into the Last City. Your job is to be a sacrifice for a greater cause. If you wish to go down this path, travel to the Last City when you are ready.&#39;&#39;](else-if: $brotherIsAlive is false)[
+[[You spot a Resistance group speaking with locals.|Town4 Encounter]]
+]}
+
+{(if: $daysRemaining &gt;= 0)[You spot the caravan preparing to leave. If you wish, you (if: $brotherIsAlive)[and your brother] can join them in hopes of a better life elsewhere.(click: &quot;join them&quot;)[(go-to:&quot;Caravan Ending&quot;)]]}
 
 [[World Map]]</tw-passagedata><tw-passagedata pid="9" name="Start" tags="" position="100,300" size="100,100">You were born into the Outsider life — traveling from place to place, scrounging for resources to survive, and trying to make the best of what remains of the world. When your parents could no longer care for you and your younger brother, you set out into the world on your own.
 
@@ -238,7 +287,74 @@ ah screw it, just make a bunch of ifs for it. --&gt;
 
 &lt;img style=&quot;width:1024px; height:1024px;&quot; src=&quot;world_map.jpg&quot; alt=&quot;Workplace&quot; usemap=&quot;#imagemapnamehere&quot;&gt;
 
-Return(click: &quot;Return&quot;)[(go-to: $currentLocation)]</tw-passagedata></tw-storydata>
+Return(click: &quot;Return&quot;)[(go-to: $currentLocation)]</tw-passagedata><tw-passagedata pid="15" name="Town2 Encounter" tags="" position="300,1099" size="100,100">{(set:$town2EncounterCompleted to true)}
+As you enter Sand&#39;s Edge, you see a group of hardened-looking individuals standing next to a large truck. They are speaking with various locals that pass them by.
+
+As you move close, you overhear them talking about recruitment of some sort.
+
+{(if: $brotherIsAlive)[[[The caravan leaves in $daysRemaining days. You don&#39;t have time for this.|Town2]]]
+(else:)[
+You decide to approach.(click: &quot;approach.&quot;)[
+&lt;br&gt;You speak with them for a short while and they tell you that they are recruiting members for the Resistance, an organization aiming to take down the Last City.
+  &lt;br&gt;I&#39;m interested.(click: &quot;I&#39;m interested.&quot;)[
+	&lt;br&gt;They offer to let you ride with them to Blacklisle where you&#39;ll		become a member of their group.
+	&lt;br&gt;Accept Their Offer (click: &quot;Accept Their Offer&quot;)[(set: $hasJoinedResistance to true)(go-to: &quot;Town4&quot;)]
+  ]
+]
+&lt;br&gt;
+[[You move on into town.|Town2]]
+]}</tw-passagedata><tw-passagedata pid="16" name="Town3-Ticket" tags="" position="1100,500" size="100,100">There is a dead body laying in an alley between two decrepit, partially-collapsed buildings. 
+
+{Take a closer look.(click: &quot;Take a closer look.&quot;)[
+&lt;br&gt;You approach and see that the body is that of a middle-aged man. Judging by the clothing, they were clearly an Outsider.
+&lt;br&gt;&lt;br&gt;You look closer, and notice something glinting in their jacket pocket.
+(click: &quot;something glinting&quot;)[
+&lt;br&gt;As you look closer, you realize that it is a set of Tickets — the only way into the city. There are two of them. Do you wish to pick them up?
+(click: &quot;pick them up?&quot;)[
+(set: $locationAccessabilityList&#39;s &quot;The Last City&quot; to true)&lt;br&gt;&#39;&#39;You pick up the Tickets and place them carefully into your bag. If you wish, you can use this pair of Tickets to bring yourself and your brother into the Last City by travelling there on the map.&#39;&#39;
+]
+]
+]}
+
+[[Return|Town3]]</tw-passagedata><tw-passagedata pid="17" name="Town4 Encounter" tags="" position="1100,800.5" size="100,100">As you enter Blacklisle, you see a group of hardened-looking individuals standing next to a large truck. They are speaking with various locals that pass them by.
+
+As you move close, you overhear them talking about recruitment of some sort.
+
+{You decide to approach.(click: &quot;approach.&quot;)[
+&lt;br&gt;You speak with them for a short while and they tell you that they are recruiting members for the Resistance, an organization aiming to take down the Last City.
+  &lt;br&gt;I&#39;m interested.(click: &quot;I&#39;m interested.&quot;)[
+	&lt;br&gt;They offer you the chance to make a difference in their cause.
+	&lt;br&gt;Accept Their Offer (click: &quot;Accept Their Offer&quot;)[(set: $hasJoinedResistance to true)(go-to: &quot;Town4&quot;)]
+  ]
+]}</tw-passagedata><tw-passagedata pid="18" name="Caravan Ending" tags="" position="700,600.5" size="100,100">You hitch a ride with a rag-tag group of Outsiders putting their hope in legends of a faraway land rich with life. The journey there will be long and hard, no doubt.
+
+{(if: $brotherIsAlive)[With your brother at your side, you both fall asleep riding along, dreaming dreams of a brighter future.]}
+
+Who knows what you&#39;ll see when you get there.
+
+&#39;&#39;Caravan Ending Achieved&#39;&#39;
+
+[[Play Again|Initialize]]</tw-passagedata><tw-passagedata pid="19" name="City Ending" tags="" position="700,799.5" size="100,100">You make your way into one of the entrance booths, sweating profusely as you prepare to present yourself. You scarcely remember what the border guard asks you, but you do remember feeling as though you stood inside that booth for days.
+
+Eventually, the guard accepts your tickets and your answers to their questions and grants you (if: $brotherIsAlive)[and your brother] passage into the city.
+
+{(if: $brotherIsAlive)[With your brother at your side, you both walk out of the entrance booth and board an elevator to take you up to the housing district.]}
+
+Who knows what you&#39;ll see when you get there.
+
+&#39;&#39;Last City Ending Achieved&#39;&#39;
+
+[[Play Again|Initialize]]</tw-passagedata><tw-passagedata pid="20" name="Resistance Ending" tags="" position="701,999.5" size="100,100">You make your way into one of the entrance booths, sweating profusely as you prepare to present yourself. You scarcely remember what the border guard asks you, but you do remember feeling as though you stood inside that booth for days.
+
+Eventually, the guard accepts your tickets and your answers to their questions and grants you passage into the city. You take an elevator up to the housing district.
+
+When you arrive, you feel strangely calm amidst the crowd. You know what you must do. Your brother is gone, and if nothing else you intend your life to count for something.
+
+Who knows what changes will come after today.
+
+&#39;&#39;Resistance Ending Achieved&#39;&#39;
+
+[[Play Again|Initialize]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">"use strict";var _slicedToArray=function(){return function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function(e,t){var n=[],r=!0,a=!1,i=void 0;try{for(var o,s=e[Symbol.iterator]();!(r=(o=s.next()).done)&&(n.push(o.value),!t||n.length!==t);r=!0);}catch(e){a=!0,i=e}finally{try{!r&&s.return&&s.return()}finally{if(a)throw i}}return n}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function _defineProperty(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function _toConsumableArray(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)}!function(){
 /**
  * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.
